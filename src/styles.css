@@ -24,6 +24,7 @@
 }
 
 .container-input {
+    width: 370px;
     padding: 15px;
     margin: 34px 0;
     display: flex;
@@ -45,6 +46,7 @@
     background-color: transparent;
     border: 0;
     display: flex;
+    margin-left: 96px;
     justify-content: center;
     align-items: center;   
     transition: transform .5s;
@@ -60,7 +62,7 @@
     justify-content: center;
     align-items: center;
     background-color: #fff;
-    width: 500px;
+    width: 400px;
     border-radius: 8px;
 }
 
