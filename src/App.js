@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
-import './styles.css';
 import api from './services/api';
-function App() {
+import './styles.css';
+export default function App() {
 
   const [input, setInput] = useState('');
   const [cep, setCep] = useState({});
@@ -55,5 +55,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
