@@ -1,4 +1,4 @@
-# React - Buscador de CEP
+# React - Busca CEP
 
 Este projeto foi desenvolvido para fins de estudo sobre o React.
 
@@ -24,3 +24,7 @@ npm start
 
 * JavaScript
 * React JS
+
+## Imagem do Projeto
+
+![Thumb](./src/assets/thumb.png)
