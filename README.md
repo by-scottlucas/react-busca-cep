@@ -26,5 +26,6 @@ npm start
 * React JS
 
 ## Imagem do Projeto
+* Link de acesso: https://by-scottlucas.github.io/react-busca-cep/
 
 ![Thumb](./src/assets/thumb.png)
