@@ -43,5 +43,41 @@
 }
 
 .modal-box button:hover {
-    background-color: #0056b3;
+    background-color: #b30000;
+}
+
+@media screen and (min-width:768px) {
+    .modal-box {
+        height: 240px;
+    }
+
+    .modal-box h3 {
+        font-size: 2rem;
+    }
+
+    .modal-box button {
+        width: 50%;
+        height: 64px;
+        font-size: 1.4rem;
+        margin-top: 24px;
+    }
+}
+
+@media screen and (min-width:1024px) {
+    .modal-box {
+        width: 30%;
+        padding: 20px;
+        height: max-content;
+    }
+
+    .modal-box h3 {
+        font-size: 1.4rem;
+    }
+
+    .modal-box button {
+        width: 50%;
+        height: 44px;
+        font-size: 1.2rem;
+        margin-top: 20px;
+    }
 }

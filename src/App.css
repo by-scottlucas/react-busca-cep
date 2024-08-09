@@ -15,7 +15,6 @@
 }
 
 @keyframes flipTitle {
-
   from {
     transform: rotateX(90deg);
   }
@@ -23,7 +22,6 @@
   to {
     transform: rotateX(0deg);
   }
-
 }
 
 .input-box {
@@ -111,13 +109,7 @@
   text-transform: capitalize;
 }
 
-
-/* ********** MEDIA QUERIES ********** */
-
-/* TABLETS */
-
 @media screen and (min-width: 768px) {
-
   .logo {
     width: 380px;
     margin-bottom: 30px;
@@ -148,14 +140,9 @@
   .box-info {
     margin-bottom: 30px;
   }
-
 }
 
-
-/* DESKTOPS */
-
 @media screen and (min-width: 1024px) {
-
   .logo {
     width: 300px;
   }
@@ -198,5 +185,4 @@
     flex-direction: row;
     justify-content: space-between;
   }
-
 }

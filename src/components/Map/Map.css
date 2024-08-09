@@ -4,7 +4,6 @@
 
 .custom-marker {
     filter: hue-rotate(145deg);
-    /* Altere o valor para mudar a cor */
 }
 
 .leaflet-control-zoom-in,
@@ -12,12 +11,7 @@
     padding: 0px;
 }
 
-/* ********** MEDIA QUERIES ********** */
-
-/* TABLETS */
-
 @media screen and (min-width: 768px) {
-
     #map {
         height: 400px;
     }
@@ -31,14 +25,9 @@
     .leaflet-control-zoom-out span {
         font-size: 2rem;
     }
-
 }
 
-
-/* DESKTOPS */
-
 @media screen and (min-width: 1024px) {
-
     #map {
         height: 250px;
     }
@@ -52,5 +41,4 @@
     .leaflet-control-zoom-out span {
         font-size: 1.6rem;
     }
-
 }
