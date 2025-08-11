@@ -6,18 +6,17 @@ import { FiSearch } from 'react-icons/fi';
 import logo from './assets/logo.png';
 import Map from './components/Map/Map';
 import Modal from './components/Modal/Modal';
-import cepService from './services/cep.service';
+import addressService from './services/addressService';
 
 export default function App() {
   const [input, setInput] = useState("");
-  const [cep, setCep] = useState({});
-  const [coordinates, setCoordinates] = useState(null);
+  const [cepData, setCepData] = useState(null);
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   const formatCep = (value) => {
-    const formattedCep = value.replace(/\D/g, "");
-    return formattedCep.replace(/(\d{5})(\d{3})/, "$1-$2");
+    const onlyNumbers = value.replace(/\D/g, "");
+    return onlyNumbers.replace(/(\d{5})(\d{3})/, "$1-$2");
   };
 
   const handleSearch = async () => {
@@ -28,24 +27,25 @@ export default function App() {
     }
 
     try {
-      const response = await cepService.get(`${input}/json`);
-      setCep(response.data);
+      const data = await addressService.fetchAddressByCep(input);
+
+      if (data.erro) {
+        setModalMessage("CEP não encontrado");
+        setShowModal(true);
+        return;
+      }
+
+      setCepData(data);
       setInput("");
     } catch (error) {
+      console.error("Erro ao buscar o CEP:", error);
       setModalMessage("Erro ao buscar o CEP");
       setShowModal(true);
-      setInput("");
-      console.error("Erro ao buscar o CEP:", error);
     }
   };
 
-  const handleCoordinatesReady = (coords) => {
-    setCoordinates(coords);
-  };
-
   const handleInputChange = (event) => {
-    const maskedCep = formatCep(event.target.value);
-    setInput(maskedCep);
+    setInput(formatCep(event.target.value));
   };
 
   const closeModal = () => {
@@ -69,39 +69,37 @@ export default function App() {
         </button>
       </section>
 
-      {Object.keys(cep).length > 0 && (
+      {cepData && (
         <section className="result-box">
-          <h2 className="result-cep">{cep.cep}</h2>
+          <h2 className="result-cep">{cepData.cep}</h2>
 
           <div className="result-info">
             <span className="box-info">
               <p className="label">Logradouro</p>
-              <p className="sub-label">{cep.logradouro}</p>
+              <p className="sub-label">{cepData.logradouro}</p>
             </span>
 
             <span className="box-info">
               <p className="label">Bairro</p>
-              <p className="sub-label">{cep.bairro}</p>
+              <p className="sub-label">{cepData.bairro}</p>
             </span>
 
             <span className="box-info">
               <p className="label">Localidade/UF</p>
               <p className="sub-label">
-                {cep.localidade}/{cep.uf}
+                {cepData.localidade}/{cepData.uf}
               </p>
             </span>
 
-            {cep.complemento && (
+            {cepData.complemento && (
               <span className="complemento">
                 <p className="label">Complemento</p>
-                <p className="sub-label">{cep.complemento}</p>
+                <p className="sub-label">{cepData.complemento}</p>
               </span>
             )}
           </div>
 
-          <Map cep={cep.cep} onCoordinatesReady={handleCoordinatesReady} />
-
-          {coordinates && <Map coordinates={coordinates} />}
+          <Map cep={cepData.cep} />
         </section>
       )}
 
