@@ -1,12 +1,11 @@
 import './App.css';
 
 import { useState } from 'react';
-import { FiSearch } from 'react-icons/fi';
 
-import logo from './assets/logo.png';
 import Map from './components/Map/Map';
 import Modal from './components/Modal/Modal';
 import addressService from './services/addressService';
+import SearchBar from './components/InputBox/SearchBar';
 
 export default function App() {
   const [input, setInput] = useState("");
@@ -54,20 +53,12 @@ export default function App() {
   };
 
   return (
-    <main className="container">
-      <img src={logo} alt="Logo" className="logo" />
-
-      <section className="input-box">
-        <input
-          type="text"
-          placeholder="Digite o CEP..."
-          value={input}
-          onChange={handleInputChange}
-        />
-        <button className="search-btn" onClick={handleSearch}>
-          <FiSearch className="icon-search" />
-        </button>
-      </section>
+    <main className="app-container">
+      <SearchBar
+        cep={input}
+        onSearch={handleSearch}
+        onCepChange={handleInputChange}
+      />
 
       {cepData && (
         <section className="result-box">

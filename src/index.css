@@ -1,5 +1,19 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: italic;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
 }
