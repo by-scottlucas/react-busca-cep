@@ -1,4 +1,4 @@
-import './Map.css';
+import './AddressMap.css';
 import 'leaflet/dist/leaflet.css';
 
 import L from 'leaflet';
@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useLocationByCep } from '../../hooks/useLocationByCep';
 import Modal from '../Modal/Modal';
 
-export default function Map({ cep }) {
+export default function AddressMap({ cep }) {
 
   const { coordinates, error, loading } = useLocationByCep(cep);
 

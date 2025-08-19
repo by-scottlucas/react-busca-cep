@@ -1,6 +1,7 @@
 import './SearchBar.css';
 
 import { MapPin, Search } from 'lucide-react';
+import PropTypes from 'prop-types';
 
 export default function SearchBar({ cep, onCepChange, onSearch }) {
     return (
@@ -34,3 +35,9 @@ export default function SearchBar({ cep, onCepChange, onSearch }) {
         </>
     )
 }
+
+SearchBar.propTypes = {
+  cep: PropTypes.string.isRequired,
+  onCepChange: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
+};

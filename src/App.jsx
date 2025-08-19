@@ -2,10 +2,10 @@ import './App.css';
 
 import { useState } from 'react';
 
-import Map from './components/Map/Map';
+import AddressCard from './components/AddressCard/AddressCard';
+import SearchBar from './components/SearchBar/SearchBar';
 import Modal from './components/Modal/Modal';
 import addressService from './services/addressService';
-import SearchBar from './components/InputBox/SearchBar';
 
 export default function App() {
   const [input, setInput] = useState("");
@@ -61,37 +61,7 @@ export default function App() {
       />
 
       {cepData && (
-        <section className="result-box">
-          <h2 className="result-cep">{cepData.cep}</h2>
-
-          <div className="result-info">
-            <span className="box-info">
-              <p className="label">Logradouro</p>
-              <p className="sub-label">{cepData.logradouro}</p>
-            </span>
-
-            <span className="box-info">
-              <p className="label">Bairro</p>
-              <p className="sub-label">{cepData.bairro}</p>
-            </span>
-
-            <span className="box-info">
-              <p className="label">Localidade/UF</p>
-              <p className="sub-label">
-                {cepData.localidade}/{cepData.uf}
-              </p>
-            </span>
-
-            {cepData.complemento && (
-              <span className="complemento">
-                <p className="label">Complemento</p>
-                <p className="sub-label">{cepData.complemento}</p>
-              </span>
-            )}
-          </div>
-
-          <Map cep={cepData.cep} />
-        </section>
+        <AddressCard cepData={cepData} />
       )}
 
       <Modal show={showModal}>

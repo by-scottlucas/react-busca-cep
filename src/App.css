@@ -1,32 +1,5 @@
 @import "tailwindcss";
 
 .app-container {
-  @apply h-screen w-full bg-gray-100 flex flex-col items-center justify-center;
-}
-
-.result-box {
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: #fff;
-  width: 80%;
-  padding: 14px;
-  border-radius: 4px;
-  box-shadow: 1px 1.5px 2px rgba(0, 0, 0, .6);
-}
-
-.result-cep {
-  color: #ff0000;
-  text-align: center;
-  font-size: 2rem;
-  margin: 10px 0px;
-}
-
-.result-info {
-  margin: 0 auto;
-  display: flex;
-  text-align: center;
-  flex-direction: column;
-  justify-content: space-around;
+  @apply h-full min-h-screen w-full bg-gray-100 flex flex-col items-center py-8;
 }
