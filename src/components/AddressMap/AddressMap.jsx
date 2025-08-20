@@ -1,58 +1,58 @@
 import './AddressMap.css';
-import 'leaflet/dist/leaflet.css';
 
-import L from 'leaflet';
-import { useEffect } from 'react';
+import { ExternalLink, Navigation } from 'lucide-react';
+import PropTypes from 'prop-types';
 
-import { useLocationByCep } from '../../hooks/useLocationByCep';
-import Modal from '../Modal/Modal';
+import { getDirectionsUrl, getEmbedUrl, getPlaceUrl } from './utils/addressMapHelpers';
 
-export default function AddressMap({ cep }) {
-
-  const { coordinates, error, loading } = useLocationByCep(cep);
-
-  useEffect(() => {
-    if (!coordinates) return;
-
-    const map = L.map("map").setView([coordinates.latitude, coordinates.longitude], 18);
-
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 20,
-    }).addTo(map);
-
-    const customIcon = L.icon({
-      iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-      shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41],
-      className: "custom-marker",
-    });
-
-    L.marker([coordinates.latitude, coordinates.longitude], { icon: customIcon }).addTo(map);
-
-    return () => map.remove();
-  }, [coordinates]);
+export default function AddressMap({ coordinates, address, addressNumber }) {
+  const handleOpen = (url) => {
+    if (url && url !== "#") window.open(url, "_blank");
+  };
 
   return (
-    <div className="main">
-      {loading && (
-        <div className="map-container">
-          <p className="message-loading">
-            Carregando Mapa...
-          </p>
-        </div>
-      )}
+    <div className="map">
+      <div className="map__actions">
+        <button
+          onClick={() => handleOpen(getDirectionsUrl(address, addressNumber, coordinates))}
+          className="map__button map__button--secondary"
+        >
+          <Navigation className="map__icon" />
+          Como Chegar
+        </button>
+        <button
+          onClick={() => handleOpen(getPlaceUrl(address, addressNumber, coordinates))}
+          className="map__button map__button--primary"
+        >
+          <ExternalLink className="map__icon" />
+          Ver no Maps
+        </button>
+      </div>
 
-      {coordinates &&
-        <div id="map" className="map-container"></div>
-      }
-
-      <Modal show={!!error}>
-        <h3>{error}</h3>
-        <button onClick={() => window.location.reload()}>OK</button>
-      </Modal>
+      <div className="map__frame">
+        <iframe
+          src={getEmbedUrl(address, addressNumber, coordinates)}
+          className="map__iframe"
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      </div>
     </div>
   );
 }
+
+AddressMap.propTypes = {
+  coordinates: PropTypes.shape({
+    lat: PropTypes.number,
+    lng: PropTypes.number,
+  }),
+  address: PropTypes.shape({
+    logradouro: PropTypes.string,
+    bairro: PropTypes.string,
+    localidade: PropTypes.string,
+    uf: PropTypes.string,
+    cep: PropTypes.string,
+  }),
+  addressNumber: PropTypes.string,
+};

@@ -1,48 +1,33 @@
-#map {
-    height: 280px;
+@import "tailwindcss";
+
+.map {
+  @apply w-full h-96 relative;
 }
 
-.message-loading{
-    text-align: center;
+.map__actions {
+  @apply absolute top-3 right-3 z-10 gap-2 hidden md:flex;
 }
 
-.custom-marker {
-    filter: hue-rotate(145deg);
+.map__button {
+  @apply flex items-center px-3 py-2 rounded-lg text-sm transition;
 }
 
-.leaflet-control-zoom-in,
-.leaflet-control-zoom-out {
-    padding: 0px;
+.map__button--secondary {
+  @apply bg-gray-100 hover:bg-gray-200 text-black;
 }
 
-@media screen and (min-width: 768px) {
-    #map {
-        height: 400px;
-    }
-
-    .leaflet-control-zoom-in,
-    .leaflet-control-zoom-out {
-        padding: 10px;
-    }
-
-    .leaflet-control-zoom-in span,
-    .leaflet-control-zoom-out span {
-        font-size: 2rem;
-    }
+.map__button--primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
 }
 
-@media screen and (min-width: 1024px) {
-    #map {
-        height: 250px;
-    }
+.map__icon {
+  @apply h-4 w-4 mr-1;
+}
 
-    .leaflet-control-zoom-in,
-    .leaflet-control-zoom-out {
-        padding: 4px;
-    }
+.map__frame {
+  @apply w-full h-full rounded-xl overflow-hidden;
+}
 
-    .leaflet-control-zoom-in span,
-    .leaflet-control-zoom-out span {
-        font-size: 1.6rem;
-    }
+.map__iframe {
+  @apply w-full h-full border-0;
 }

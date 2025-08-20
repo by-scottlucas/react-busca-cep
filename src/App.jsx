@@ -3,12 +3,12 @@ import './App.css';
 import { useState } from 'react';
 
 import AddressCard from './components/AddressCard/AddressCard';
-import SearchBar from './components/SearchBar/SearchBar';
 import Modal from './components/Modal/Modal';
+import SearchBar from './components/SearchBar/SearchBar';
 import addressService from './services/addressService';
 
 export default function App() {
-  const [input, setInput] = useState("");
+  const [cepInput, setCepInput] = useState("");
   const [cepData, setCepData] = useState(null);
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -18,15 +18,35 @@ export default function App() {
     return onlyNumbers.replace(/(\d{5})(\d{3})/, "$1-$2");
   };
 
+  const getCoordinatesFromAddress = async (address) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`
+      );
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        return {
+          lat: parseFloat(data[0].lat),
+          lng: parseFloat(data[0].lon),
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error("Erro ao buscar coordenadas:", error);
+      return null;
+    }
+  };
+
   const handleSearch = async () => {
-    if (!input) {
+    if (!cepInput) {
       setModalMessage("Por favor, preencha um CEP válido");
       setShowModal(true);
       return;
     }
 
     try {
-      const data = await addressService.fetchAddressByCep(input);
+      const data = await addressService.fetchAddressByCep(cepInput);
 
       if (data.erro) {
         setModalMessage("CEP não encontrado");
@@ -34,8 +54,15 @@ export default function App() {
         return;
       }
 
-      setCepData(data);
-      setInput("");
+      const addressString = `${data.logradouro || ""}, ${data.bairro || ""}, ${data.localidade || ""} - ${data.uf}, ${data.cep}`;
+      const coordinates = await getCoordinatesFromAddress(addressString);
+
+      setCepData({
+        ...data,
+        coordinates,
+      });
+
+      setCepInput("");
     } catch (error) {
       console.error("Erro ao buscar o CEP:", error);
       setModalMessage("Erro ao buscar o CEP");
@@ -44,7 +71,7 @@ export default function App() {
   };
 
   const handleInputChange = (event) => {
-    setInput(formatCep(event.target.value));
+    setCepInput(formatCep(event.target.value));
   };
 
   const closeModal = () => {
@@ -55,7 +82,7 @@ export default function App() {
   return (
     <main className="app-container">
       <SearchBar
-        cep={input}
+        cep={cepInput}
         onSearch={handleSearch}
         onCepChange={handleInputChange}
       />
