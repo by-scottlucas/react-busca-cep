@@ -8,6 +8,7 @@ import SearchBar from './components/SearchBar/SearchBar';
 import Toast from './components/Toast/Toast';
 import { useLocationByCep } from './hooks/useLocationByCep';
 import { formatCep } from './utils/cepUtils';
+import Footer from './components/Footer/Footer';
 
 export default function App() {
   const [cepInput, setCepInput] = useState("");
@@ -39,29 +40,35 @@ export default function App() {
   }, [error]);
 
   return (
-    <main className="app-container">
-      <SearchBar
-        cep={cepInput}
-        onCepChange={handleInputChange}
-        onSearch={handleSearch}
-      />
+    <>
+      <div className='app-container'>
+        <main className="app-container__content">
+          <SearchBar
+            cep={cepInput}
+            onCepChange={handleInputChange}
+            onSearch={handleSearch}
+          />
 
-      {loading && (
-        <div className="mt-36">
-          <Loading />
-        </div>
-      )}
+          {loading && (
+            <div className="mt-36">
+              <Loading />
+            </div>
+          )}
 
-      {toastMessage && (
-        <Toast
-          message={toastMessage}
-          onClose={handleCloseToast}
-        />
-      )}
+          {toastMessage && (
+            <Toast
+              message={toastMessage}
+              onClose={handleCloseToast}
+            />
+          )}
 
-      {cepData && !loading &&
-        <AddressCard cepData={cepData} />
-      }
-    </main>
+          {cepData && !loading &&
+            <AddressCard cepData={cepData} />
+          }
+        </main>
+
+        <Footer />
+      </div>
+    </>
   );
 }

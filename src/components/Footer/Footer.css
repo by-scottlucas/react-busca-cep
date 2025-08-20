@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+.footer {
+    @apply flex items-center gap-1;
+}
+
+.footer-label {
+    @apply text-sm;
+}
+
+.footer-label--default {
+    @apply text-gray-500;
+}
+
+.footer-label--link {
+    @apply text-blue-700 hover:underline transition-all ease-in-out duration-300;
+}

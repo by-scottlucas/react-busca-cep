@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
 .app-container {
-  @apply h-full min-h-screen w-full bg-gray-100 flex flex-col items-center py-8;
+  @apply min-h-screen w-full bg-gray-100 flex flex-col items-center justify-between py-8;
+}
+
+.app-container__content {
+  @apply w-full flex flex-col items-center py-8;
 }
