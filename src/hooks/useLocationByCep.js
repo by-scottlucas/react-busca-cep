@@ -1,48 +1,49 @@
-import { useState, useEffect } from "react";
-import addressService from "../services/addressService";
+import { useState } from 'react';
 
-export function useLocationByCep(cep) {
-  const [coordinates, setCoordinates] = useState(null);
+import { fetchAddressByCep, fetchCoordinatesByAddress } from '../services/addressService';
+
+export function useLocationByCep() {
+  const [cepData, setCepData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!cep) return;
-
-    async function getLocation() {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const addressData = await addressService.fetchAddressByCep(cep);
-
-        if (addressData.erro) {
-          setError("CEP não encontrado.");
-          return;
-        }
-
-        const address = `${addressData.logradouro}, ${addressData.bairro}, ${addressData.localidade} - ${addressData.uf}`;
-        const coordsData = await addressService.fetchCoordinatesByAddress(address);
-
-        if (coordsData.length === 0) {
-          setError("Endereço não encontrado.");
-          return;
-        }
-
-        setCoordinates({
-          latitude: parseFloat(coordsData[0].lat),
-          longitude: parseFloat(coordsData[0].lon),
-        });
-      } catch (err) {
-        console.error(err);
-        setError("Erro ao buscar informações.");
-      } finally {
-        setLoading(false);
-      }
+  const fetchCepData = async (cepInput) => {
+    const cleanCep = cepInput.replace(/\D/g, "");
+    if (cleanCep.length !== 8) {
+      setError("Por favor, insira um CEP válido.");
+      setCepData(null);
+      return;
     }
 
-    getLocation();
-  }, [cep]);
+    setLoading(true);
+    setError(null);
 
-  return { coordinates, error, loading };
+    try {
+      const addressData = await fetchAddressByCep(cleanCep);
+
+      if (addressData.erro) {
+        setError("CEP não encontrado.");
+        setCepData(null);
+        return;
+      }
+
+      const addressString = `${addressData.logradouro}, ${addressData.bairro}, ${addressData.localidade} - ${addressData.uf}`;
+      const coordsData = await fetchCoordinatesByAddress(addressString);
+
+      const coordinates =
+        coordsData.length > 0
+          ? { lat: parseFloat(coordsData[0].lat), lng: parseFloat(coordsData[0].lon) }
+          : null;
+
+      setCepData({ ...addressData, coordinates });
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao buscar informações.");
+      setCepData(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { cepData, error, loading, fetchCepData };
 }

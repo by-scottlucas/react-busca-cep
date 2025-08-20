@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+.toast {
+  @apply absolute top-5 left-[38%] flex items-center w-full max-w-xs p-4 text-gray-700 bg-white rounded-lg shadow-sm shadow-gray-300;
+}
+
+.toast__message {
+  @apply ms-3 text-sm font-medium;
+}
+
+.toast__button {
+  @apply ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 transition-all ease-in-out duration-300;
+}

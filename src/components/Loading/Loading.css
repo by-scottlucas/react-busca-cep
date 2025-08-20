@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+.loading{
+    @apply flex flex-col items-center;
+}
+
+.loading__spinner {
+    @apply rounded-full border-blue-500 border-t-blue-700
+    animate-spin mb-2 aspect-square md:border-4 lg:w-12 lg:h-12 lg:border-8;;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

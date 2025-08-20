@@ -1,100 +1,67 @@
 import './App.css';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import AddressCard from './components/AddressCard/AddressCard';
-import Modal from './components/Modal/Modal';
+import Loading from './components/Loading/Loading';
 import SearchBar from './components/SearchBar/SearchBar';
-import addressService from './services/addressService';
+import Toast from './components/Toast/Toast';
+import { useLocationByCep } from './hooks/useLocationByCep';
+import { formatCep } from './utils/cepUtils';
 
 export default function App() {
   const [cepInput, setCepInput] = useState("");
-  const [cepData, setCepData] = useState(null);
-  const [modalMessage, setModalMessage] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
-  const formatCep = (value) => {
-    const onlyNumbers = value.replace(/\D/g, "");
-    return onlyNumbers.replace(/(\d{5})(\d{3})/, "$1-$2");
-  };
-
-  const getCoordinatesFromAddress = async (address) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`
-      );
-      const data = await response.json();
-
-      if (data && data.length > 0) {
-        return {
-          lat: parseFloat(data[0].lat),
-          lng: parseFloat(data[0].lon),
-        };
-      }
-      return null;
-    } catch (error) {
-      console.error("Erro ao buscar coordenadas:", error);
-      return null;
-    }
-  };
-
-  const handleSearch = async () => {
-    if (!cepInput) {
-      setModalMessage("Por favor, preencha um CEP válido");
-      setShowModal(true);
-      return;
-    }
-
-    try {
-      const data = await addressService.fetchAddressByCep(cepInput);
-
-      if (data.erro) {
-        setModalMessage("CEP não encontrado");
-        setShowModal(true);
-        return;
-      }
-
-      const addressString = `${data.logradouro || ""}, ${data.bairro || ""}, ${data.localidade || ""} - ${data.uf}, ${data.cep}`;
-      const coordinates = await getCoordinatesFromAddress(addressString);
-
-      setCepData({
-        ...data,
-        coordinates,
-      });
-
-      setCepInput("");
-    } catch (error) {
-      console.error("Erro ao buscar o CEP:", error);
-      setModalMessage("Erro ao buscar o CEP");
-      setShowModal(true);
-    }
-  };
+  const { cepData, error, loading, fetchCepData } = useLocationByCep();
 
   const handleInputChange = (event) => {
     setCepInput(formatCep(event.target.value));
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-    setModalMessage("");
+  const handleSearch = () => {
+    if (!cepInput) {
+      setToastMessage("Por favor, preencha um CEP válido");
+      return;
+    }
+    setToastMessage("");
+    fetchCepData(cepInput);
   };
+
+  const handleCloseToast = () => {
+    setToastMessage("");
+  };
+
+  useEffect(() => {
+    if (error) {
+      setToastMessage(error);
+    }
+  }, [error]);
 
   return (
     <main className="app-container">
       <SearchBar
         cep={cepInput}
-        onSearch={handleSearch}
         onCepChange={handleInputChange}
+        onSearch={handleSearch}
       />
 
-      {cepData && (
-        <AddressCard cepData={cepData} />
+      {loading && (
+        <div className="mt-36">
+          <Loading />
+        </div>
       )}
 
-      <Modal show={showModal}>
-        <h3>{modalMessage}</h3>
-        <button onClick={closeModal}>OK</button>
-      </Modal>
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          onClose={handleCloseToast}
+        />
+      )}
+
+      {cepData && !loading &&
+        <AddressCard cepData={cepData} />
+      }
     </main>
   );
 }
